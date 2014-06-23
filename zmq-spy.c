@@ -35,10 +35,20 @@ int show_error(char const *where)
 /**
  * Formats and displays binary data.
  */
-void display(void *data, size_t size)
+void display(void const *data, size_t size)
 {
+    unsigned char const *p;
+    unsigned char const *end = data + size;
+
     fputc('\t', stdout);
-    fwrite(data, size, 1, stdout);
+    for (p = data; p < end; ++p)
+        printf("%02x ", *p);
+
+    fputc('"', stdout);
+    for (p = data; p < end; ++p)
+        fputc(' ' <= *p && *p <= '~' ? *p : '.', stdout);
+    fputc('"', stdout);
+
     fputc('\n', stdout);
 }
 
